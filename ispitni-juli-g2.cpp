@@ -39,8 +39,6 @@ ostream& operator<<(ostream& COUT, const StatusZahtjeva& obj) {
 }
 
 string GenerisiOznaku(const char* imeprezime, int broj, int godina) {
-	//Redni broj mora biti u rasponu 1-999, a godina 2000-2099.
-	//Za neispravne podatke funkcija vraca "SRV-000/XX-0000".
 	if (broj < 1 || broj>999 || godina < 2000 || godina>2099)
 	{
 		return AlocirajTekst("SRV-000/XX-0000");
@@ -54,7 +52,7 @@ string GenerisiOznaku(const char* imeprezime, int broj, int godina) {
 	sifra += "/";
 	string inicijali;
 	inicijali += toupper(imePrezime[0]);
-	
+
 	int brojac = 0;
 	for (size_t i = 0; i < imePrezime.length(); i++)
 	{
@@ -101,7 +99,7 @@ public:
 	}
 	Kolekcija(const Kolekcija& obj) {
 		_trenutno = obj._trenutno;
-		
+
 			_elementi1 = new T1[obj._trenutno];
 			_elementi2 = new T2[obj._trenutno];
 			for (size_t i = 0; i < _trenutno; i++)
@@ -109,7 +107,7 @@ public:
 				_elementi1[i] = obj._elementi1[i];
 				_elementi2[i] = obj._elementi2[i];
 			}
-		
+
 	}
 	Kolekcija& operator=(const Kolekcija& obj) {
 		if (this != &obj) {
@@ -131,7 +129,6 @@ public:
 		return *this;
 	}
 
-
 	Kolekcija UkloniDuplikate() {
 		Kolekcija novaKolekcija;
 		for (size_t i = 0; i < _trenutno; i++) {
@@ -143,7 +140,7 @@ public:
 					break;
 				}
 			}
-			
+
 			if (!pronadjenDuplikat) {
 				novaKolekcija.Dodaj(_elementi1[i], _elementi2[i]);
 			}
@@ -151,8 +148,7 @@ public:
 
 		return novaKolekcija;
 
-	}    
-
+	}
 
 	void Dodaj(T1 prvi, T2 drugi) {
 		if (_trenutno >= max) {
@@ -293,7 +289,6 @@ public:
 	int GetGodina() const { return *_godina; }
 	friend ostream& operator<<(ostream& COUT, const DatumVrijeme& obj)
 	{
-		// ToString vraca datum i vrijeme u formatu DD.MM.GGGG HH:MM
 		COUT << obj.ToString();
 		return COUT;
 	}
@@ -344,11 +339,6 @@ public:
 	int GetTrajanjeMinuta() const { return _trajanjeMinuta; }
 	friend ostream& operator<<(ostream& COUT, const Intervencija& obj)
 	{
-		/*
-		ToString vraca podatke u formatu :
-		opis | tehnicar | cijena KM | trajanje min
-		Zamjena diska | Haris Hadzic | 85.50 KM | 45 min
-		*/
 		COUT << obj.ToString();
 		return COUT;
 	}
@@ -385,11 +375,6 @@ public:
 		return COUT;
 	}
 };
-//Konstruktor ServisnogZahtjeva generise oznaku na osnovu klijenta,
-////	rednog broja i godine zaprimanja, te evidentira pocetni status
-//   ZAPRIMLJEN
-//	sa proslijedjenim vremenom.
-////	*/
 class ServisniZahtjev {
 	char* _oznaka;
 	char* _uredjaj;
@@ -462,16 +447,10 @@ public:
 	}
 	friend ostream& operator<<(ostream& COUT, const ServisniZahtjev&
 		obj) {
-		// ToString vraca:
-		// oznaka | ime i prezime klijenta | uredjaj | trenutni status
 		COUT << obj.ToString();
 		return COUT;
 	}
 
-	//cout << "Ukupna cijena: " << laptop.UkupnaCijena() << " KM" <<
-	//	crt;
-	//cout << "Ukupno trajanje: " << laptop.UkupnoTrajanje() << " min"
-	//	<< crt;
 	double UkupnaCijena() {
 		double ukupnacijena=0;
 		for (size_t i = 0; i < this->GetIntervencije().size(); i++)
@@ -491,7 +470,7 @@ public:
 	bool DodajIntervenciju(Intervencija intervencija){
 		if ((this->GetTrenutniStatus() == DIJAGNOSTIKA || this->GetTrenutniStatus() == POPRAVKA) && intervencija.GetCijena()>0 && intervencija.GetTrajanjeMinuta()>0) {
 			this->GetIntervencije().push_back(intervencija);
-			
+
 			return true;
 		}
 		return false;
@@ -528,7 +507,6 @@ class Servis {
 	vector<ServisniZahtjev> _zahtjevi;
 public:
 
-
 	Servis(const char* naziv = "") {
 		_naziv = AlocirajTekst(naziv);
 	}
@@ -536,19 +514,6 @@ public:
 		_naziv = AlocirajTekst(obj._naziv);
 		_zahtjevi = obj._zahtjevi;
 	}
-	//PronadjiZahtjev vraca pokazivac na zahtjev sa proslijedjenom
-	//	   oznakom.
-	//		Ako zahtjev nije pronadjen, metoda vraca nullptr.
-	//		*/
-	//	string oznakaLaptopa = laptop.GetOznaka();
-	//ServisniZahtjev* pronadjen =
-	//	fitServis.PronadjiZahtjev(oznakaLaptopa);
-	//	if (pronadjen != nullptr)
-	//		cout << "Pronadjen zahtjev: " << pronadjen->GetOznaka() <<
-	//		crt;
-	//	if (fitServis.PronadjiZahtjev("SRV-999/XX-2026") == nullptr)
-	//		cout << "Zahtjev nije pronadjen" << crt;
-	//	/*
 	ServisniZahtjev* PronadjiZahtjev(const char* oznaka) {
 		ServisniZahtjev* temp = new ServisniZahtjev;
 		for (size_t i = 0; i < _zahtjevi.size(); i++)
@@ -563,7 +528,7 @@ public:
 
 	}
 	void DodajZahtjev(ServisniZahtjev zahtjev) {
-		
+
 		for (size_t i = 0; i < _zahtjevi.size(); i++)
 		{
 			if (strcmp(_zahtjevi[i].GetOznaka(), zahtjev.GetOznaka())==0 && _zahtjevi[i].GetRedniBroj() == zahtjev.GetRedniBroj())
@@ -579,36 +544,6 @@ public:
 		}
 		return *this;
 	}
-	//	EvidentirajStatus pronalazi zahtjev i pokusava dodati status
-//   koristeci
-//   pravila metode DodajStatus.
-// Racun se salje u zasebnom threadu iskljucivo nakon uspjesnog
-//evidentiranja
-// statusa ZAVRSEN. Za ostale statuse se ne salju obavijesti. Ako
-//zahtjev ne
-// postoji ili status nije dodan, metoda vraca false.
-// Primjer sadrzaja racuna:
-// ------------------------------------------------------------------
-//---------------
-// To: amina@fit.ba
-// From: racuni@servis.ba
-// Subject: Servisni zahtjev zavrsen - racun
-// Postovani Amina Buric,
-// Servisni zahtjev SRV-042/AB-2026 za uredjaj Laptop je zavrsen.
-// Ukupan iznos: 140.50 KM
-// Hvala na povjerenju.
-// ------------------------------------------------------------------
-//---------------
-// */
-	//if (fitServis.EvidentirajStatus(oznakaLaptopa, ZAVRSEN, zavrsen))
-	//	cout << "Zahtjev zavrsen i racun poslan" << crt;
-	//if (!fitServis.EvidentirajStatus(
-	//	oznakaLaptopa, ZAVRSEN, DatumVrijeme(9, 7, 2026, 12, 0)))
-	//	cout << "Ponavljanje zavrsnog statusa nije dozvoljeno" << crt;
-	//if (!fitServis.EvidentirajStatus(
-	//	"NEPOSTOJECI", DIJAGNOSTIKA, dijagnostika))
-	//	cout << "Status nije evidentiran za nepostojeci zahtjev" <<
-	//	crt;
 	void saljiracun(ServisniZahtjev zahtjev) {
 		m.lock();
 		cout << "To: " << zahtjev.GetKlijent().GetEmail() << endl;
@@ -625,8 +560,7 @@ public:
 		{
 			if (strcmp(_zahtjevi[i].GetOznaka(), oznaka) == 0)
 			{
-				
-				
+
 				if (_zahtjevi[i].DodajStatus(status, datum) && status == ZAVRSEN)
 				{
 					thread t1(&Servis::saljiracun, this, _zahtjevi[i]);
@@ -639,16 +573,6 @@ public:
 		}
 		return false;
 	}
-	//IzdvojiNezavrsene vraca vector pokazivaca na sve zahtjeve ciji
-	//	//   trenutni
-	//	//	status nije ZAVRSEN.
-	//	//	*/
-	//	vector<ServisniZahtjev*> nezavrseni =
-	//	fitServis.IzdvojiNezavrsene();
-	//for (auto zahtjev : nezavrseni)
-	//	cout << zahtjev->GetOznaka() << " -> "
-	//	<< StatusZahtjevaNazivi[(int)zahtjev->GetTrenutniStatus()] <<
-	//	crt;
 	vector<ServisniZahtjev*> IzdvojiNezavrsene() {
 		vector<ServisniZahtjev*> temp;
 		for (size_t i = 0; i < _zahtjevi.size(); i++)
@@ -679,43 +603,7 @@ public:
 		delete[] _naziv; _naziv = nullptr;
 	}
 };
-//const char* GetOdgovorNaPrvoPitanje() {
-//	cout << "Pitanje -> Pojasnite zbog cega se operator<< implementira kao globalna a ne funkcija clanica, te na koji nacin se implementiraju prefiksalni i postfiksalni oblik operatora inkrementiranja ? \n";
-//		return "Odgovor -> OVDJE UNESITE VAS ODGOVOR";
-//}
-//const char* GetOdgovorNaDrugoPitanje() {
-//	cout << "Pitanje -> Pojasnite nacin na koji biste, koristeci obradjene klase i metode, mogli saznati velicinu nekog tekstualnog fajla.\n";
-//		return "Odgovor -> OVDJE UNESITE VAS ODGOVOR";
-//}
 int main() {
-	//cout << PORUKA_TELEFON; cin.get();
-	//cout << PORUKA_TELEFON; cin.get();
-	//cout << PORUKA_ISPIT; cin.get();
-	//system("cls");
-	//cout << GetOdgovorNaPrvoPitanje() << crt;
-	//cin.get();
-	//cout << GetOdgovorNaDrugoPitanje() << crt;
-	//cin.get()
-		/*
- Funkcija GenerisiOznaku generise oznaku servisnog zahtjeva u
-formatu:
- SRV-BBB/IN-GGGG
- Potpis funkcije treba biti:
- string GenerisiOznaku(const char* imePrezime, int redniBroj, int
-godina)
- SRV -> fiksni prefiks,
- BBB -> redni broj zahtjeva popunjen nulama na slobodnim mjestima,
- IN -> inicijali imena i prezimena klijenta,
- GGGG -> godina zaprimanja zahtjeva.
- Kod imena koje sadrzi vise rijeci koriste se inicijal prve i
-posljednje
- rijeci. Redni broj mora biti u rasponu 1-999, a godina 2000-2099.
- Za neispravne podatke funkcija vraca "SRV-000/XX-0000".
- */
-	//cout<<GenerisiOznaku("Amina Buric", 42, 2026)<<endl;
-	//cout<<GenerisiOznaku("Goran Skondric", 7, 2026)<<endl;
-	//cout<<GenerisiOznaku("Ana Marija Kovac", 156, 2027)<<endl;
-	//cout << GenerisiOznaku("Ana Kovac", 1560, 2027) << endl;
 
 		if (GenerisiOznaku("Amina Buric", 42, 2026) == "SRV-042/AB-2026")
 			cout << "Oznaka OK" << crt;
@@ -730,16 +618,6 @@ posljednje
 		&&
 		GenerisiOznaku("Amina Buric", 42, 1999) == "SRV-000/XX-0000")
 		cout << "Neispravni podaci za oznaku OK" << crt;
-	/*
-	Koristeci regex, funkcija ValidirajOznaku provjerava prethodno
-   definisani
-	format. Prefiks mora biti SRV, redni broj mora imati tri cifre i
-   ne moze
-	biti 000, inicijali moraju biti velika slova, a godina je 2000-
-   2099.
-	Potpis funkcije treba biti:
-	bool ValidirajOznaku(const string& oznaka)
-	*/
 	if (ValidirajOznaku("SRV-042/AB-2026"))
 		cout << "OZNAKA VALIDNA" << crt;
 	if (!ValidirajOznaku("SRV/042-AB-2026") &&
@@ -755,13 +633,6 @@ posljednje
 	brojevi.Dodaj(30, "Trideset");
 	brojevi.Dodaj(20, "Dvadeset");
 	cout << brojevi << crt;
-	/*
-	UkloniDuplikate vraca novu kolekciju u kojoj je zadrzano samo prvo
-	pojavljivanje svakog para. Par predstavlja duplikat iskljucivo ako
-   su
-	jednaki i prvi i drugi element. Originalna kolekcija ostaje
-   nepromijenjena.
-	*/
 	Kolekcija<int, string, 6> bezDuplikata =
 		brojevi.UkloniDuplikate();
 	cout << "Bez duplikata:" << crt << bezDuplikata;
@@ -787,11 +658,6 @@ posljednje
 	DatumVrijeme dijagnostika(9, 7, 2026, 9, 0);
 	DatumVrijeme popravka(9, 7, 2026, 10, 0);
 	DatumVrijeme zavrsen(9, 7, 2026, 11, 0);
-//	/*
-//	ToString vraca datum i vrijeme u formatu DD.MM.GGGG HH:MM,
-//   ukljucujuci
-//	pocetne nule.
-//	*/
 	cout << zaprimljen.ToString() << crt; // 09.07.2026 08:00
 	if (dijagnostika > zaprimljen)
 		cout << "Vrijeme dijagnostike je nakon zaprimanja" << crt;
@@ -802,63 +668,27 @@ posljednje
 	Klijent goran("Goran Skondric", "goran@fit.ba", "062-222-333");
 	Klijent kopijaKlijenta = amina;
 	cout << kopijaKlijenta << crt;
- /*Intervencija sadrzi opis, ime tehnicara, cijenu i trajanje uminutama.
- */
 	Intervencija pregled("Dijagnostika uredjaja", "Haris Hadzic", 20,
 		30);
 	Intervencija zamjenaDiska("Zamjena diska", "Haris Hadzic", 85.5,
 		45);
 	Intervencija instalacija("Instalacija sistema", "Maja Majic", 35,
 		60);
-//	/* ToString vraca podatke u formatu:
-//	opis | tehnicar | cijena KM | trajanje min
-//	Zamjena diska | Haris Hadzic | 85.50 KM | 45 min
-//	*/
 	cout << zamjenaDiska.ToString() << crt;
-//	/*
-//	Konstruktor ServisnogZahtjeva generise oznaku na osnovu klijenta,
-//	rednog broja i godine zaprimanja, te evidentira pocetni status
-//   ZAPRIMLJEN
-//	sa proslijedjenim vremenom.
-//	*/
 	ServisniZahtjev laptop("Laptop", "Ne pokrece se", amina, 42,
 		zaprimljen);
 	ServisniZahtjev telefon("Telefon", "Razbijen ekran", goran, 7,
 		zaprimljen);
-//	/*
-//	ToString vraca podatke u formatu:
-//	oznaka | ime i prezime klijenta | uredjaj | trenutni status
-//	SRV-042/AB-2026 | Amina Buric | Laptop | ZAPRIMLJEN
-//	*/
 	cout << laptop.ToString() << crt;
 	if (laptop.ToString() == "SRV-042/AB-2026 | Amina Buric | Laptop | ZAPRIMLJEN")
 		cout << "ServisniZahtjev ToString OK" << crt;
-//	/*
-//	DodajStatus dodaje status samo ako je vrijeme vece od vremena
-//   posljednjeg
-//	statusa i ako status predstavlja neposredno sljedecu fazu.
-//	Dozvoljen slijed je: ZAPRIMLJEN -> DIJAGNOSTIKA -> POPRAVKA ->
-//   ZAVRSEN
-//	Preskakanje ili ponavljanje statusa nije dozvoljeno. Nakon statusa
-//	ZAVRSEN nisu dozvoljene nove promjene. Neuspjesan pokusaj vraca
-//   false
-//	bez izmjene kolekcije statusa.
-//	*/
 	if (!laptop.DodajStatus(POPRAVKA, dijagnostika))
 		cout << "Preskakanje statusa nije dozvoljeno" << crt;
 	if (laptop.DodajStatus(DIJAGNOSTIKA, dijagnostika))
 		cout << "Status DIJAGNOSTIKA dodan" << crt;
 	if (!laptop.DodajStatus(DIJAGNOSTIKA, popravka))
 		cout << "Ponavljanje statusa nije dozvoljeno" << crt;
-	
-//	DodajIntervenciju dodaje intervenciju samo dok je zahtjev u
-//statusu
-// DIJAGNOSTIKA ili POPRAVKA, uz cijenu i trajanje vece od nule.
-// Metoda vraca true ako je intervencija dodana, u suprotnom false.
-// UkupnaCijena vraca zbir cijena svih intervencija, a UkupnoTrajanje
-//zbir
-// njihovih trajanja u minutama.
-// */
+
 	if (laptop.DodajIntervenciju(pregled))
 		cout << "Intervencija dodana" << crt;
 	if (laptop.DodajStatus(POPRAVKA, popravka))
@@ -873,13 +703,6 @@ posljednje
 	ServisniZahtjev kopijaLaptopa = laptop;
 	cout << kopijaLaptopa << crt;
 	Servis fitServis("FIT Servis");
-//	/*
-//	DodajZahtjev dodaje zahtjev u servis. Nije dozvoljeno dodati dva
-//   zahtjeva
-//	sa istim rednim brojem ili istom oznakom. U slucaju duplikata
-//   metoda
-//	baca izuzetak.
-//	*/
 	fitServis.DodajZahtjev(laptop);
 	fitServis.DodajZahtjev(telefon);
 	try {
@@ -888,11 +711,6 @@ posljednje
 	catch (exception& e) {
 		cout << "Exception: " << e.what() << crt;
 	}
-//	/*
-//	PronadjiZahtjev vraca pokazivac na zahtjev sa proslijedjenom
-//   oznakom.
-//	Ako zahtjev nije pronadjen, metoda vraca nullptr.
-//	*/
 	string oznakaLaptopa = laptop.GetOznaka();
 	ServisniZahtjev* pronadjen =
 		fitServis.PronadjiZahtjev(oznakaLaptopa.c_str());
@@ -901,28 +719,6 @@ posljednje
 		crt;
 	if (fitServis.PronadjiZahtjev("SRV-999/XX-2026") == nullptr)
 		cout << "Zahtjev nije pronadjen" << crt;
-//	/*
-//	EvidentirajStatus pronalazi zahtjev i pokusava dodati status
-//   koristeci
-//   pravila metode DodajStatus.
-// Racun se salje u zasebnom threadu iskljucivo nakon uspjesnog
-//evidentiranja
-// statusa ZAVRSEN. Za ostale statuse se ne salju obavijesti. Ako
-//zahtjev ne
-// postoji ili status nije dodan, metoda vraca false.
-// Primjer sadrzaja racuna:
-// ------------------------------------------------------------------
-//---------------
-// To: amina@fit.ba
-// From: racuni@servis.ba
-// Subject: Servisni zahtjev zavrsen - racun
-// Postovani Amina Buric,
-// Servisni zahtjev SRV-042/AB-2026 za uredjaj Laptop je zavrsen.
-// Ukupan iznos: 140.50 KM
-// Hvala na povjerenju.
-// ------------------------------------------------------------------
-//---------------
-// */
 	if (fitServis.EvidentirajStatus(oznakaLaptopa.c_str(), ZAVRSEN, zavrsen))
 		cout << "Zahtjev zavrsen i racun poslan" << crt;
 	if (!fitServis.EvidentirajStatus(
@@ -933,23 +729,12 @@ posljednje
 		cout << "Status nije evidentiran za nepostojeci zahtjev" <<
 		crt;
 
-//	/*
-//	IzdvojiNezavrsene vraca vector pokazivaca na sve zahtjeve ciji
-//   trenutni
-//	status nije ZAVRSEN.
-//	*/
 	vector<ServisniZahtjev*> nezavrseni =
 		fitServis.IzdvojiNezavrsene();
 	for (auto zahtjev : nezavrseni)
 		cout << zahtjev->GetOznaka() << " -> "
 		<< StatusZahtjevaNazivi[(int)zahtjev->GetTrenutniStatus()] <<
 		crt;
-//	/*
-//	IzracunajPrihod vraca zbir cijena svih intervencija evidentiranih
-//   na
-//	zahtjevima koji imaju status ZAVRSEN. Intervencije na nezavrsenim
-//	zahtjevima ne ulaze u prihod.
-//	*/
 	cout << "Ostvareni prihod: " << fitServis.IzracunajPrihod()<< " KM" << crt;
 	Servis kopijaServisa = fitServis;
 	cout << kopijaServisa.GetNaziv() << " ima "
